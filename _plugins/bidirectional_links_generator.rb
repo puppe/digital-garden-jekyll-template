@@ -17,8 +17,7 @@ class BidirectionalLinksGenerator < Jekyll::Generator
       all_docs.each do |note_potentially_linked_to|
         title_from_filename = Regexp.escape(File.basename(
           note_potentially_linked_to.basename,
-          File.extname(note_potentially_linked_to.basename)
-        ).gsub('_', ' ').gsub('-', ' ').capitalize)
+          File.extname(note_potentially_linked_to.basename)))
 
         title_from_data = note_potentially_linked_to.data['title']
         if title_from_data

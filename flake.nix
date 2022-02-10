@@ -27,8 +27,12 @@
                 mkdir "$out"
                 cp -r _site/* "$out"
               '';
-            };
 
+              # This is broken, and I cannot figure out why.
+              # Error message:
+              # incompatible character encodings: UTF-8 and ASCII-8BIT (Encoding::CompatibilityError)
+              meta.broken = true;
+            };
         in {
           mpuppe-notes-env = prev.callPackage mpuppe-notes-env-fn { };
           mpuppe-notes = prev.callPackage mpuppe-notes-fn {

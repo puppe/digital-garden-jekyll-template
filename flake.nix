@@ -1,29 +1,51 @@
 {
-  inputs = {
-    flake-utils.url = "github:numtide/flake-utils";
-  };
+  inputs = { flake-utils.url = "github:numtide/flake-utils"; };
 
   outputs = inputs@{ self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
+    {
+      overlay = final: prev:
+        let
+
+          mpuppe-notes-env-fn = { bundlerEnv, ruby }:
+            bundlerEnv {
+              inherit ruby;
+              name = "mpuppe-notes-env";
+              gemdir = ./.;
+              groups = [ "default" "production" "development" "test" ];
+            };
+
+          mpuppe-notes-fn = { stdenv, mpuppe-notes-env }:
+            stdenv.mkDerivation {
+              name = "mpuppe-notes";
+              buildInputs = [ mpuppe-notes-env mpuppe-notes-env.wrappedRuby ];
+              src = ./.;
+              phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+              buildPhase = ''
+                jekyll build
+              '';
+              installPhase = ''
+                mkdir "$out"
+                cp -r _site/* "$out"
+              '';
+            };
+
+        in {
+          mpuppe-notes-env = prev.callPackage mpuppe-notes-env-fn { };
+          mpuppe-notes = prev.callPackage mpuppe-notes-fn {
+            inherit (final) mpuppe-notes-env;
+          };
+        };
+    } // flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-
-        gems = pkgs.bundlerEnv {
-          name = "gemset";
-          inherit (pkgs) ruby;
-          gemfile = ./Gemfile;
-          lockfile = ./Gemfile.lock;
-          gemset = ./gemset.nix;
-          groups = [ "default" "production" "development" "test" ];
-        };
+        packages = nixpkgs.lib.fix (final: self.overlay final pkgs);
+        finalPkgs = pkgs // (nixpkgs.lib.fix (final: self.overlay final pkgs));
       in {
-        devShell = with pkgs;
+        inherit packages;
+        devShell = with finalPkgs;
           mkShell {
-            buildInputs = [
-              gems
-              gems.wrappedRuby
-              bundix
-            ];
+            buildInputs =
+              [ mpuppe-notes-env mpuppe-notes-env.wrappedRuby bundix ];
           };
       });
 }

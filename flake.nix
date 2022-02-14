@@ -17,7 +17,8 @@
           mpuppe-notes-fn = { stdenv, mpuppe-notes-env }:
             stdenv.mkDerivation {
               name = "mpuppe-notes";
-              buildInputs = [ mpuppe-notes-env mpuppe-notes-env.wrappedRuby ];
+              buildInputs =
+                [ mpuppe-notes-env mpuppe-notes-env.wrappedRuby prev.pandoc ];
               src = ./.;
               phases = [ "unpackPhase" "buildPhase" "installPhase" ];
               buildPhase = ''
@@ -48,8 +49,13 @@
         inherit packages;
         devShell = with finalPkgs;
           mkShell {
-            buildInputs =
-              [ mpuppe-notes-env mpuppe-notes-env.wrappedRuby bundix ];
+            shellHook = ''
+              ${finalPkgs.rsync}/bin/rsync -rlt --delete ${finalPkgs.nodePackages.katex}/lib/node_modules/katex/dist/ assets/katex
+            '';
+            buildInputs = [ bundix ];
+            inputsFrom = [
+              (mpuppe-notes.overrideAttrs (oldAttrs: { meta.broken = false; }))
+            ];
           };
       });
 }

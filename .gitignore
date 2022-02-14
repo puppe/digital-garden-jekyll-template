@@ -1,5 +1,5 @@
 # Generated website directory
-_site/
+/_site/
 
 # Sass cache
 .sass-cache/
@@ -11,5 +11,5 @@ _site/
 # Notes graph metadata
 _includes/notes_graph.json
 
-# Obsidian config
-.obsidian/
+# KaTeX
+/assets/katex

@@ -70,7 +70,7 @@
       iframe.onload = function() {
         tooltipContentHtml = ''
         tooltipContentHtml += '<div style="font-weight: bold;">' + iframe.contentWindow.document.querySelector('h1').innerHTML + '</div>'
-        tooltipContentHtml += iframe.contentWindow.document.querySelector('content').innerHTML
+        tooltipContentHtml += iframe.contentWindow.document.querySelector('#note-content').innerHTML
 
         tooltipContent.innerHTML = tooltipContentHtml
 

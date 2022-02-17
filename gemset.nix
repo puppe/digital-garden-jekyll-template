@@ -109,10 +109,10 @@
     platforms = [];
     source = {
       fetchSubmodules = false;
-      rev = "e0c918691db625401ef5850a030da59d0124d356";
-      sha256 = "09vwcxlygjp10lgj960ydimx570qvfzrrdbr8vxhwvyhbzmdvzpp";
+      rev = "77f385486b9597daf364ebe1bce1c8eeafce25d4";
+      sha256 = "14lw4mq5p8qq6vvsg4359qgalclj5qqn77sissap0dbhsi4mwg1j";
       type = "git";
-      url = "https://github.com/maximevaillancourt/jekyll-last-modified-at";
+      url = "https://github.com/puppe/jekyll-last-modified-at.git";
     };
     version = "1.3.0";
   };

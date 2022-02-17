@@ -1,7 +1,9 @@
 {
-  inputs = { flake-utils.url = "github:numtide/flake-utils"; };
+  inputs = {
+    flake-utils.url = "github:numtide/flake-utils";
+  };
 
-  outputs = inputs@{ self, nixpkgs, flake-utils }:
+  outputs = inputs@{ self, nixpkgs, flake-utils, ... }:
     {
       overlay = final: prev:
         let
@@ -39,6 +41,15 @@
           mpuppe-notes = prev.callPackage mpuppe-notes-fn {
             inherit (final) mpuppe-notes-env;
           };
+
+          citeproc = prev.haskellPackages.citeproc_0_6_0_1.override (old: {
+            mkDerivation = args:
+              old.mkDerivation (args // {
+                configureFlags = "${args.attrPath or ""} --flags=executable";
+                libraryHaskellDepends = args.libraryHaskellDepends
+                  ++ [ prev.haskellPackages.aeson-pretty ];
+              });
+          });
         };
     } // flake-utils.lib.eachDefaultSystem (system:
       let
@@ -52,7 +63,7 @@
             shellHook = ''
               ${finalPkgs.rsync}/bin/rsync -rlt --delete ${finalPkgs.nodePackages.katex}/lib/node_modules/katex/dist/ assets/katex
             '';
-            buildInputs = [ bundix ];
+            buildInputs = [ bundix citeproc ];
             inputsFrom = [
               (mpuppe-notes.overrideAttrs (oldAttrs: { meta.broken = false; }))
             ];

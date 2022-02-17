@@ -112,12 +112,27 @@ nav {
   display: grid;
   grid-gap: 2em;
   grid-template-areas:
-    "content"
+    "main"
     "side";
+
+  #main-column { grid-area: main }
+  #side-column { grid-area: side }
 
   @media (min-width: 700px) {
     grid-template-columns: 3fr 1fr;
-    grid-template-areas: "content side";
+    grid-template-areas: "main side";
+  }
+
+  aside h1 {
+    font-size: 1.17em;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+  }
+
+  div#side-column aside:first-of-type h1 {
+    margin-block-start: 0;
   }
 }
 
@@ -143,4 +158,56 @@ code {
 .invalid-link-brackets {
   color: #ccc;
   cursor: help;
+}
+
+/* Pandoc styles for bibliographies */
+/* BEGIN pandoc */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  /*
+$if(csl-entry-spacing)$
+  margin-bottom: $csl-entry-spacing$;
+$endif$
+  */
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+/* END pandoc */
+
+div.csl-right-inline {
+  margin-right: 2em;
+  padding-right: 1em;
+}
+
+div.lit-note-link {
+  min-width: 2em;
+  float: right;
+}
+
+#bib-info {
+  background: $color-box-background;
+  div.csl-left-margin {
+    display: none;
+  }
+
+  div.csl-right-inline {
+    margin-left: 0;
+    margin-right: 0;
+    padding-right: 0;
+    padding-left: 0;
+  }
 }

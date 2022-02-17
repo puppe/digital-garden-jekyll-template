@@ -25,7 +25,7 @@ relative_permalinks: false
 plugins:
   - jekyll-last-modified-at
 
-markdown: Pandoc
+markdown: ZettlrPandoc
 
 sass:
   sass_dir:          _sass
@@ -38,10 +38,14 @@ collections:
 
 defaults:
   - scope:
-      path: "**/*"
+      path: ""
     values:
       layout: "default"
   - scope:
-      path: "_notes/**/*.md"
+      type: "notes"
     values:
       layout: "note"
+  - scope:
+      path: "_notes/literatur/**/*.md"
+    values:
+      literature_note: true

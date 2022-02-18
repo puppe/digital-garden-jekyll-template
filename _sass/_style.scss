@@ -97,6 +97,9 @@ a {
   &.reversefootnote:after {
     content: "";
   }
+  &.note-link {
+    letter-spacing: 0.1em;
+  }
 }
 
 *:focus {

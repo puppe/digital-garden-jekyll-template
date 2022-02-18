@@ -165,6 +165,8 @@ code {
 
 /* Pandoc styles for bibliographies */
 /* BEGIN pandoc */
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;

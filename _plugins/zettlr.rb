@@ -252,14 +252,14 @@ module Jekyll
     end
 
     def self.add_links_to_literature_notes(page)
-      doc = Nokogiri::HTML5(page.content)
-      bib_entries = doc.css('.csl-entry')
+      fragment = Nokogiri::HTML5::fragment(page.content)
+      bib_entries = fragment.css('.csl-entry')
 
       bib_entries.each do |entry|
         id = entry.attribute('id').value.match(/^ref-(.*)$/)[1]
         entry.at_css('.csl-left-margin').next= "<div class='lit-note-link'><a class='internal-link' href='/#{id}'>Note</a></div>"
       end
-      page.content = doc.to_s
+      page.content = fragment.to_s
     end
 
     Jekyll::Hooks.register :documents, :post_convert, &method(:add_links_to_literature_notes)
